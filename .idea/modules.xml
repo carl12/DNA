@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/DNA.iml" filepath="$PROJECT_DIR$/.idea/DNA.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Dominion/.idea/Dominion.iml" filepath="$PROJECT_DIR$/../Dominion/.idea/Dominion.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../SwarmSim/.idea/SwarmSim.iml" filepath="$PROJECT_DIR$/../SwarmSim/.idea/SwarmSim.iml" />
     </modules>
   </component>
 </project>
