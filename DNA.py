@@ -51,20 +51,20 @@ def lcs_dyn(a, b):
 
 
 def lcs_rec(a, b):
-    test = 0
-    a = lcs_rec2(a, b, len(a) - 1, len(b) - 1, test)
-    print(test)
+    recursions = 0
+    a = lcs_rec2(a, b, len(a) - 1, len(b) - 1, recursions)
+
     return a
 
 
-def lcs_rec2(a, b, i, j, test):
-    test += 1
+def lcs_rec2(a, b, i, j, recursions):
+    recursions += 1
     if i < 0 or j < 0:
         return 0
     if a[i] == b[j]:
-        return lcs_rec2(a, b, i - 1, j - 1, test) + 1
+        return lcs_rec2(a, b, i - 1, j - 1, recursions) + 1
     else:
-        return max(lcs_rec2(a, b, i - 1, j, test), lcs_rec2(a, b, i, j - 1, test))
+        return max(lcs_rec2(a, b, i - 1, j, recursions), lcs_rec2(a, b, i, j - 1, recursions))
 
 
 def lcs_brute(a, b):
@@ -142,10 +142,9 @@ def run_test(a,b,algorith):
     types = {0:("Brute",lcs_brute),1:("Recursive",lcs_rec),2:("Dynamic",lcs_dyn)}
     run = types.get(algorith)
     if run:
-        print("Running LCS",run[0],"on size",len(a)," by ",len(b))
+        print("Running LCS",run[0],"on size",len(a),"by",len(b))
         before = time.time()
         solution = run[1](a,b)
-        print(solution)
         after = time.time()
         print("Time elapsed is",after-before)
         print()
@@ -174,8 +173,8 @@ run_test(a15,b15,0)
 run_test(a15,b15,1)
 run_test(a15,b15,2)
 
-run_test(a20,b20,0)
-run_test(a20,b20,1)
+# run_test(a20,b20,0)
+# run_test(a20,b20,1)
 run_test(a20,b20,2)
 
 run_test(a100,b100,2)
