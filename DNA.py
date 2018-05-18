@@ -8,12 +8,17 @@ def lcs_dyn(a, b):
     m = len(a)
     n = len(b)
     answer = ""
-    myArr = [[0 for x in range(m + 1)] for y in range(n + 1)]
-    myArr2 = [[0 for x in range(m + 1)] for y in range(n + 1)]
+    myArr = [[0 for _ in range(m + 1)] for _ in range(n + 1)]
+    myArr2 = [[0 for _ in range(m + 1)] for _ in range(n + 1)]
 
+    long_run = False
     for i in range(1, m + 1):
         if i % 100 == 0:
-            print("Done: ", i)
+            if not long_run:
+                long_run = True
+                print("Hundreds of characters: ",end="")
+
+            print(".",end="")
         for j in range(1, n + 1):
             if b[j - 1] == a[i - 1]:
                 myArr[i][j] = myArr[i - 1][j - 1] + 1
@@ -24,6 +29,8 @@ def lcs_dyn(a, b):
             else:
                 myArr[i][j] = myArr[i - 1][j]
                 myArr2[i][j] = 0
+    if long_run:
+        print(" Done!")
 
     x = m
     y = n
@@ -131,73 +138,53 @@ def lcs_brute2(a, b):
     print(longest, " is the match")
     return max
 
+def run_test(a,b,algorith):
+    types = {0:("Brute",lcs_brute),1:("Recursive",lcs_rec),2:("Dynamic",lcs_dyn)}
+    run = types.get(algorith)
+    if run:
+        print("Running LCS",run[0],"on size",len(a)," by ",len(b))
+        before = time.time()
+        solution = run[1](a,b)
+        print(solution)
+        after = time.time()
+        print("Time elapsed is",after-before)
+        print()
+        return solution
+    else:
+        print("Algorithm not found")
 
-before = time.time()
-print("Size = 10 brute:")
+
 a10 = "TGTTTCCCGT"
 b10 = "GCTCGCATTA"
-before = time.time()
-print(lcs_brute(a10, b10))
-after = time.time()
-print(after - before, " seconds elapsed")
-print()
 
-before = time.time()
-print("Size = 10 Dynamic:")
-a10 = "TGTTTCCCGT"
-b10 = "GCTCGCATTA"
-before = time.time()
-print(lcs_dyn(a10, b10), "is longest substring")
-after = time.time()
-print(after - before, " seconds elapsed")
-print()
-
-print("Size = 15 brute:")
 a15 = "GATTTAGATTATTGC"
 b15 = "AGGTCTAGAATATTG"
-before = time.time()
-print(lcs_rec(a15, b15))
-after = time.time()
-print(after - before, " seconds elapsed")
-print()
 
-print("Size = 15 Dynamic: ")
-a15 = "GATTTAGATTATTGC"
-b15 = "AGGTCTAGAATATTG"
-before = time.time()
-print(lcs_dyn(a15, b15), "is longest substring")
-after = time.time()
-print(after - before, " seconds elapsed")
-print()
-
-print("Size = 20 brute:")
 a20 = "CCGCTTCTTAAGGGAGTATA"
 b20 = "GGATAGACGATCGTCTCAAA"
-before = time.time()
-print(lcs_rec(a20, b20))
-after = time.time()
-print(after - before, " seconds elapsed")
-print()
 
-print("Size = 20 Dynamic: ")
-a20 = "CCGCTTCTTAAGGGAGTATA"
-b20 = "GGATAGACGATCGTCTCAAA"
-before = time.time()
-print(lcs_dyn(a20, b20), "is longest substring")
-after = time.time()
-print(after - before, " seconds elapsed")
-print()
-
-print("Size = 100 Dynamic: ")
 a100 = "TGTGTGACTTCCTGGCTACTACCCGTTGCATCTAGTTACAGGTATCACTAACGTCTGATTATGCAGCTCCCAATTAGGGCCGTGTGTCAGGACTTTTTGA"
 b100 = "CGGGTTCGCCCGCGGGAGTAACTGTTACAGCAAAGTACTGTACCGCAACGCTGGGGATGATATGTACGGGGCTTGTGTGATTAGACAGGGCCTGAGCTCC"
-before = time.time()
-print(lcs_dyn(a100, b100), "is longest substring")
-after = time.time()
-print(after - before, " seconds elapsed")
-print()
 
-print("Size = 1000 Dynamic: ")
+run_test(a10,b10,0)
+run_test(a10,b10,1)
+run_test(a10,b10,2)
+
+run_test(a15,b15,0)
+run_test(a15,b15,1)
+run_test(a15,b15,2)
+
+run_test(a20,b20,0)
+run_test(a20,b20,1)
+run_test(a20,b20,2)
+
+run_test(a100,b100,2)
+
+# run_test(a1000,b1000,2)
+#
+# run_test(a10000,b10000,2)
+
+
 a1000 = "AAGTTGGTACCCTCTATTTATGCCCGGATCTTGATCTCCAGACAGGGGGTAAAGGCATGGGCCAGTTACTACCCGTATTTAGGTTGTATTCCGCATCTGAAGGCGCCGTAGTGA" \
         "TAGGCGCTGAACTGAATGCATAATGGCCAATTTGACACCTGTGGTTGTCCTCACCAATACCTGGCCCTGTCGCTCCTAATACCCCGAAGCATAGAGCAGGTCCTAACCGGATAA" \
         "CTCAGCTAACAGAAACTCCCCCAAGAACTAAGCACACCCAATGTGAACGTAGTCCGCTAGTGCTAGCGCTTCCTTACAGCCTTTCCTTATGGTATCTATGAGCTGGCCTAGTAT" \
@@ -207,7 +194,6 @@ a1000 = "AAGTTGGTACCCTCTATTTATGCCCGGATCTTGATCTCCAGACAGGGGGTAAAGGCATGGGCCAGTTACTA
         "GATGAGTCACAGGACTTTTCAGACCATGTGTCTGCCTCTAGGACCAATGGCTGGGTGTTGGTATACAACAGAGTCATTCATTTACGTCGTATATTCTAATACCACTCTTCACAC" \
         "GTCGAAATTTTCTGAGTTTCGACTACGCTTGTGAGCACTTCCTACTTGGTTAAGCAAGTGTGGGACGGCCTTCTTGGGCCAGGACGTAGGTTCCGCTGACAGTACAACGGAGAC" \
         "CAGAAAAGCTATTCAAGAGAGACATGGTACAGTTCTGTATGCATAAGCGTGCCCCTTAGCGCAACTGGCGTATACCGTCGATTCAGGG"
-
 b1000 = 'GTTCGTTCATGACTGTCTAAACCTATTCGACGTGCGCCCTTTAGAGGATCATTCTAGATT' \
         'GTATGAGACCGATAAGATGAACATTTTATCAATTCCGCGCGGGGCTACAATATGATCTTG' \
         'ATAATTGTGGTATAAGAGACGATAAAGGCGATTTTCTATCAATCCATCTGACAAACCGTC' \
@@ -225,10 +211,8 @@ b1000 = 'GTTCGTTCATGACTGTCTAAACCTATTCGACGTGCGCCCTTTAGAGGATCATTCTAGATT' \
         'GAAAACATGGCTTGCGCATCACCTTCCATAAGGACGACGTCGAGCCAAGCGCATAGAAGG' \
         'CTTTATAATTATAAGGACAATGGGGACATCTCGTCCTGGTGTATTCGTCCAAGTGCTTGG' \
         'TGAAATCATCACGACCCATAGATGCTTCATCAGCATCATC'
-before = time.time()
-print(lcs_dyn(a1000, b1000), "is longest substring")
-after = time.time()
-print(after - before, " seconds elapsed")
+
+
 a10000 = "AAGTTGGTACCCTCTATTTATGCCCGGATCTTGATCTCCAGACAGGGGGTAAAGGCATGGGCCAGTTACTACCCGTATTTAGGTTGTATTCCGCATCTGAAGGCGCCGTAGTGA" \
          "TAGGCGCTGAACTGAATGCATAATGGCCAATTTGACACCTGTGGTTGTCCTCACCAATACCTGGCCCTGTCGCTCCTAATACCCCGAAGCATAGAGCAGGTCCTAACCGGATAA" \
          "CTCAGCTAACAGAAACTCCCCCAAGAACTAAGCACACCCAATGTGAACGTAGTCCGCTAGTGCTAGCGCTTCCTTACAGCCTTTCCTTATGGTATCTATGAGCTGGCCTAGTAT" \
@@ -491,11 +475,6 @@ b10000 = 'GTTCGTTCATGACTGTCTAAACCTATTCGACGTGCGCCCTTTAGAGGATCATTCTAGATT' \
          'CTTTATAATTATAAGGACAATGGGGACATCTCGTCCTGGTGTATTCGTCCAAGTGCTTGG' \
          'TGAAATCATCACGACCCATAGATGCTTCATCAGCATCATC'
 
-print("Size = 10000 Dynamic:")
-before = time.time()
-print(lcs_dyn(a10000, b10000), "is longest substring")
-after = time.time()
-print(after - before, " seconds elapsed")
 
 '''
 **OUTPUT**
