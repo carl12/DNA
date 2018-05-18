@@ -45,9 +45,9 @@ def lcs_dyn(a, b):
             y -= 1
         else:
             x -= 1
-    print(answer, " is the match")
 
-    return myArr[i][j]
+
+    return (myArr[i][j], answer)
 
 
 def lcs_rec(a, b):
@@ -60,11 +60,14 @@ def lcs_rec(a, b):
 def lcs_rec2(a, b, i, j, recursions):
     recursions += 1
     if i < 0 or j < 0:
-        return 0
+        return (0,"")
     if a[i] == b[j]:
-        return lcs_rec2(a, b, i - 1, j - 1, recursions) + 1
+        recurse = lcs_rec2(a, b, i - 1, j - 1, recursions)
+        return (recurse[0]+1,recurse[1]+a[i])
     else:
-        return max(lcs_rec2(a, b, i - 1, j, recursions), lcs_rec2(a, b, i, j - 1, recursions))
+        left = lcs_rec2(a, b, i - 1, j, recursions)
+        up = lcs_rec2(a, b, i, j - 1, recursions)
+        return left if left[0] > up[0] else up
 
 
 def lcs_brute(a, b):
@@ -85,8 +88,8 @@ def lcs_brute(a, b):
             max = tmp
             longest = test
         test = ""
-    print(longest, " is the match")
-    return max
+
+    return (max, longest)
 
 
 def match(a1, b2):
@@ -144,11 +147,12 @@ def run_test(a,b,algorith):
     if run:
         print("Running LCS",run[0],"on size",len(a),"by",len(b))
         before = time.time()
-        solution = run[1](a,b)
+        res = run[1](a,b)
         after = time.time()
+        print("The solution with a length of",res[0],"is",res[1])
         print("Time elapsed is",after-before)
         print()
-        return solution
+        return res
     else:
         print("Algorithm not found")
 
