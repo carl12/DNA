@@ -1,4 +1,5 @@
 import time
+import itertools
 
 test = 0
 __author__ = 'Carl Rodriguez'
@@ -47,6 +48,20 @@ def lcs_dyn(a, b):
             x -= 1
 
 
+    #
+    # print(b)
+    # print(a)
+    # for index,asdf in enumerate(myArr):
+    #     # print(a[index],end="")
+    #     for asdf1 in asdf:
+    #         print(asdf1,end="")
+    #     print()
+    # print("--------------")
+    # for asdf in myArr2:
+    #     for asdf1 in asdf:
+    #         print(asdf1,end="")
+    #     print()
+
     return (myArr[i][j], answer)
 
 
@@ -70,39 +85,38 @@ def lcs_rec2(a, b, i, j, recursions):
         return left if left[0] > up[0] else up
 
 
+
 def lcs_brute(a, b):
-    max = 0
-    tmp = 0
-    start = 0
-    longest = ""
+    max_len = 0
+    max_sub = ""
     test = ""
     for i in range(0, 2 ** len(a)):
         for j in range(0, len(a)):
             if (i // (2 ** j)) % 2 == 0:
                 test += a[j]
-        if len(test) < max:
+        if len(test) < max_len:
             tmp = 0
         else:
             tmp = match(test, b)
-        if tmp > max:
-            max = tmp
-            longest = test
+        if tmp > max_len:
+            max_len = tmp
+            max_sub = test
         test = ""
 
-    return (max, longest)
+    return (max_len, max_sub)
 
 
-def match(a1, b2):
+def match(sub, string):
     track = 0
-    if len(a1) == 0:
+    if len(sub) == 0:
         return 0
-    for i in range(0, len(b2)):
-        if a1[track] == b2[i]:
+    for elem in string:
+        if sub[track] == elem:
             track += 1
-            if track == len(a1):
+            if track == len(sub):
                 return track
-        i += 1
-    return track
+
+    return 0 if track < len(sub) else track
 
 
 def printArr(multi):
@@ -169,19 +183,20 @@ b20 = "GGATAGACGATCGTCTCAAA"
 a100 = "TGTGTGACTTCCTGGCTACTACCCGTTGCATCTAGTTACAGGTATCACTAACGTCTGATTATGCAGCTCCCAATTAGGGCCGTGTGTCAGGACTTTTTGA"
 b100 = "CGGGTTCGCCCGCGGGAGTAACTGTTACAGCAAAGTACTGTACCGCAACGCTGGGGATGATATGTACGGGGCTTGTGTGATTAGACAGGGCCTGAGCTCC"
 
-run_test(a10,b10,0)
-run_test(a10,b10,1)
-run_test(a10,b10,2)
+# run_test(a10,b10,0)
+# run_test(a10,b10,1)
+# run_test(a10,b10,2)
 
 run_test(a15,b15,0)
 run_test(a15,b15,1)
 run_test(a15,b15,2)
 
+#
 # run_test(a20,b20,0)
 # run_test(a20,b20,1)
-run_test(a20,b20,2)
-
-run_test(a100,b100,2)
+# run_test(a20,b20,2)
+#
+# run_test(a100,b100,2)
 
 # run_test(a1000,b1000,2)
 #
