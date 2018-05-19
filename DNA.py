@@ -68,7 +68,6 @@ def lcs_dyn(a, b):
 def lcs_rec(a, b):
     recursions = 0
     a = lcs_rec2(a, b, len(a) - 1, len(b) - 1, recursions)
-
     return a
 
 
@@ -90,25 +89,36 @@ def lcs_brute(a, b):
     max_len = 0
     max_sub = ""
     test = ""
-    for i in range(0, 2 ** len(a)):
-        for j in range(0, len(a)):
-            if (i // (2 ** j)) % 2 == 0:
-                test += a[j]
-        if len(test) < max_len:
-            tmp = 0
-        else:
-            tmp = match(test, b)
-        if tmp > max_len:
-            max_len = tmp
-            max_sub = test
-        test = ""
 
-    return (max_len, max_sub)
+    for i in reversed(range(len(b))):
+        combos = itertools.combinations(b,i)
+        for combo in combos:
+            length = match(combo,a)
+            if length > 0:
+                return (length,combo)
+
+    #
+    #
+    #
+    # for i in range(0, 2 ** len(a)):
+    #     for j in range(0, len(a)):
+    #         if (i // (2 ** j)) % 2 == 0:
+    #             test += a[j]
+    #     if len(test) < max_len:
+    #         tmp = 0
+    #     else:
+    #         tmp = match(test, b)
+    #     if tmp > max_len:
+    #         max_len = tmp
+    #         max_sub = test
+    #     test = ""
+    #
+    # return (max_len, max_sub)
 
 
 def match(sub, string):
     track = 0
-    if len(sub) == 0:
+    if len(sub) == 0 or len(sub) > len(string):
         return 0
     for elem in string:
         if sub[track] == elem:
@@ -125,35 +135,6 @@ def printArr(multi):
             print(multi[i][j], end=" ")
         print()
 
-
-def lcs_brute2(a, b):
-    max = 0
-    tmp = 0
-    start = 0
-    longest = ""
-    test = ""
-    binary = ""
-    for i in range(0, 2 ** len(a)):
-        for j in range(0, len(a)):
-            if (i // (2 ** j)) % 2 == 0:
-                binary += "1"
-                test += a[j]
-            else:
-                binary += "0"
-        if len(test) < max:
-            tmp = 0
-        else:
-            tmp = match(test, b)
-        if tmp > max:
-            max = tmp
-            longest = test
-            print(binary, " current max")
-        else:
-            print(binary)
-        binary = ""
-        test = ""
-    print(longest, " is the match")
-    return max
 
 def run_test(a,b,algorith):
     types = {0:("Brute",lcs_brute),1:("Recursive",lcs_rec),2:("Dynamic",lcs_dyn)}
@@ -187,9 +168,9 @@ b100 = "CGGGTTCGCCCGCGGGAGTAACTGTTACAGCAAAGTACTGTACCGCAACGCTGGGGATGATATGTACGGGGC
 # run_test(a10,b10,1)
 # run_test(a10,b10,2)
 
-run_test(a15,b15,0)
-run_test(a15,b15,1)
-run_test(a15,b15,2)
+# run_test(a15,b15,0)
+# run_test(a15,b15,1)
+# run_test(a15,b15,2)
 
 #
 # run_test(a20,b20,0)
