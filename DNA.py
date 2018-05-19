@@ -32,27 +32,27 @@ def lcs_dyn(a, b):
     m = len(a)
     n = len(b)
 
-    myArr = [[0 for _ in range(m + 1)] for _ in range(n + 1)]
-    myArr2 = [[0 for _ in range(m + 1)] for _ in range(n + 1)]
+    curr_lcs = [[0 for _ in range(m + 1)] for _ in range(n + 1)]
+    match_path = [[0 for _ in range(m + 1)] for _ in range(n + 1)]
 
     big_problem = False
     for i in range(1, m + 1):
         if i % 100 == 0:
             if not big_problem:
                 big_problem = True
-                print("Hundreds of characters: ",end="")
+                print("Hundreds of characters: ", end="")
 
-            print(".",end="")
+            print(".", end="")
         for j in range(1, n + 1):
             if b[j - 1] == a[i - 1]:
-                myArr[i][j] = myArr[i - 1][j - 1] + 1
-                myArr2[i][j] = 2
-            elif myArr[i][j - 1] >= myArr[i - 1][j]:
-                myArr[i][j] = myArr[i][j - 1]
-                myArr2[i][j] = 1
+                curr_lcs[i][j] = curr_lcs[i - 1][j - 1] + 1
+                match_path[i][j] = 2
+            elif curr_lcs[i][j - 1] >= curr_lcs[i - 1][j]:
+                curr_lcs[i][j] = curr_lcs[i][j - 1]
+                match_path[i][j] = 1
             else:
-                myArr[i][j] = myArr[i - 1][j]
-                myArr2[i][j] = 0
+                curr_lcs[i][j] = curr_lcs[i - 1][j]
+                match_path[i][j] = 0
     if big_problem:
         print(" Done!")
 
@@ -61,45 +61,42 @@ def lcs_dyn(a, b):
     answer = ""
 
     while x > 0 and y > 0:
-        if myArr2[x][y] == 2:
+        if match_path[x][y] == 2:
             answer = a[x - 1] + answer
             x -= 1
             y -= 1
-        elif myArr2[x][y] == 1:
+        elif match_path[x][y] == 1:
             y -= 1
         else:
             x -= 1
 
-    return (myArr[i][j], answer)
+    return curr_lcs[m][n], answer
 
 
 def lcs_rec(a, b):
-    recursions = 0
     a = lcs_rec2(a, b, len(a) - 1, len(b) - 1)
     return a
 
 
-def lcs_rec2(a, b, i , j,):
-
+def lcs_rec2(a, b, i, j):
     if i < 0 or j < 0:
-        return (0,"")
+        return 0, ""
     if a[i] == b[j]:
         recurse = lcs_rec2(a, b, i - 1, j - 1)
-        return (recurse[0]+1,recurse[1]+a[i])
+        return recurse[0] + 1, recurse[1] + a[i]
     else:
         left = lcs_rec2(a, b, i - 1, j)
         up = lcs_rec2(a, b, i, j - 1)
         return left if left[0] > up[0] else up
 
 
-
 def lcs_brute(a, b):
     for i in reversed(range(len(b))):
-        combos = itertools.combinations(b,i)
+        combos = itertools.combinations(b, i)
         for combo in combos:
-            length = match(combo,a)
+            length = match(combo, a)
             if length > 0:
-                return (length, ''.join(combo))
+                return length, ''.join(combo)
 
 
 def match(sub, string):
@@ -115,23 +112,23 @@ def match(sub, string):
     return 0 if track < len(sub) else track
 
 
-def printArr(multi):
+def print_arr(multi):
     for j in range(0, len(multi[0])):
         for i in range(0, len(multi)):
             print(multi[i][j], end=" ")
         print()
 
 
-def run_test(a,b,algorith):
-    types = {0:("Brute",lcs_brute),1:("Recursive",lcs_rec),2:("Dynamic",lcs_dyn)}
-    run = types.get(algorith)
+def run_test(a, b, algorithm):
+    types = {0: ("Brute", lcs_brute), 1: ("Recursive", lcs_rec), 2: ("Dynamic", lcs_dyn)}
+    run = types.get(algorithm)
     if run:
-        print("Running LCS",run[0],"on size",len(a),"by",len(b))
+        print("Running LCS", run[0], "on size", len(a), "by", len(b))
         before = time.time()
-        res = run[1](a,b)
+        res = run[1](a, b)
         after = time.time()
-        print("The solution with a length of",res[0],"is",res[1])
-        print("Time elapsed is",after-before)
+        print("The solution with a length of", res[0], "is", res[1])
+        print("Time elapsed is", after - before)
         print()
         return res
     else:
@@ -154,23 +151,20 @@ b100 = "CGGGTTCGCCCGCGGGAGTAACTGTTACAGCAAAGTACTGTACCGCAACGCTGGGGATGATATGTACGGGGC
 # that take longer to run
 long_run = False
 
-run_test(a10,b10,0)
-run_test(a10,b10,1)
-run_test(a10,b10,2)
+run_test(a10, b10, 0)
+run_test(a10, b10, 1)
+run_test(a10, b10, 2)
 
-run_test(a15,b15,0)
-run_test(a15,b15,1)
-run_test(a15,b15,2)
+run_test(a15, b15, 0)
+run_test(a15, b15, 1)
+run_test(a15, b15, 2)
 
-
-run_test(a20,b20,0)
+run_test(a20, b20, 0)
 if long_run:
-    run_test(a20,b20,1)
-run_test(a20,b20,2)
+    run_test(a20, b20, 1)
+run_test(a20, b20, 2)
 
-run_test(a100,b100,2)
-
-
+run_test(a100, b100, 2)
 
 a1000 = "AAGTTGGTACCCTCTATTTATGCCCGGATCTTGATCTCCAGACAGGGGGTAAAGGCATGGGCCAGTTACTACCCGTATTTAGGTTGTATTCCGCATCTGAAGGCGCCGTAGTGA" \
         "TAGGCGCTGAACTGAATGCATAATGGCCAATTTGACACCTGTGGTTGTCCTCACCAATACCTGGCCCTGTCGCTCCTAATACCCCGAAGCATAGAGCAGGTCCTAACCGGATAA" \
@@ -198,7 +192,6 @@ b1000 = 'GTTCGTTCATGACTGTCTAAACCTATTCGACGTGCGCCCTTTAGAGGATCATTCTAGATT' \
         'GAAAACATGGCTTGCGCATCACCTTCCATAAGGACGACGTCGAGCCAAGCGCATAGAAGG' \
         'CTTTATAATTATAAGGACAATGGGGACATCTCGTCCTGGTGTATTCGTCCAAGTGCTTGG' \
         'TGAAATCATCACGACCCATAGATGCTTCATCAGCATCATC'
-
 
 a10000 = "AAGTTGGTACCCTCTATTTATGCCCGGATCTTGATCTCCAGACAGGGGGTAAAGGCATGGGCCAGTTACTACCCGTATTTAGGTTGTATTCCGCATCTGAAGGCGCCGTAGTGA" \
          "TAGGCGCTGAACTGAATGCATAATGGCCAATTTGACACCTGTGGTTGTCCTCACCAATACCTGGCCCTGTCGCTCCTAATACCCCGAAGCATAGAGCAGGTCCTAACCGGATAA" \
@@ -461,11 +454,10 @@ b10000 = 'GTTCGTTCATGACTGTCTAAACCTATTCGACGTGCGCCCTTTAGAGGATCATTCTAGATT' \
          'CTTTATAATTATAAGGACAATGGGGACATCTCGTCCTGGTGTATTCGTCCAAGTGCTTGG' \
          'TGAAATCATCACGACCCATAGATGCTTCATCAGCATCATC'
 
-run_test(a1000,b1000,2)
+run_test(a1000, b1000, 2)
 
 if long_run:
-    run_test(a10000,b10000,2)
-
+    run_test(a10000, b10000, 2)
 
 '''
 **OUTPUT** (with long_run = True)
