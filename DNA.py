@@ -4,7 +4,7 @@ substring (LCS). The LCS is the longest series of characters which is
 present in order in both strings. LCS is useful in biology, where it can
 be used to compare the similarity of two different gene sequences.
 
-Both the brute force and dynamic run in exponential time O(2^n), whereas the
+Both the brute force and dynamic run in exponential time, whereas the
 dynamic approach runs in O(n^2) time, which means it is dramatically
 faster for even medium length strings.
 
@@ -75,20 +75,20 @@ def lcs_dyn(a, b):
 
 def lcs_rec(a, b):
     recursions = 0
-    a = lcs_rec2(a, b, len(a) - 1, len(b) - 1, recursions)
+    a = lcs_rec2(a, b, len(a) - 1, len(b) - 1)
     return a
 
 
-def lcs_rec2(a, b, i, j, recursions):
-    recursions += 1
+def lcs_rec2(a, b, i , j,):
+
     if i < 0 or j < 0:
         return (0,"")
     if a[i] == b[j]:
-        recurse = lcs_rec2(a, b, i - 1, j - 1, recursions)
+        recurse = lcs_rec2(a, b, i - 1, j - 1)
         return (recurse[0]+1,recurse[1]+a[i])
     else:
-        left = lcs_rec2(a, b, i - 1, j, recursions)
-        up = lcs_rec2(a, b, i, j - 1, recursions)
+        left = lcs_rec2(a, b, i - 1, j)
+        up = lcs_rec2(a, b, i, j - 1)
         return left if left[0] > up[0] else up
 
 
